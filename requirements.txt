@@ -1,0 +1,5 @@
+discord
+dotenv
+sqlalchemy
+alembic
+psycopg2
