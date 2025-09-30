@@ -21,6 +21,20 @@ services:
       retries: 5
       start_period: 10s
 
+  app:
+    build: .
+    env_file: .env
+    environment:
+      # Ensure the app connects to the Postgres service on the compose network
+      DB_HOST: postgres
+      DB_PORT: '5432'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: ["/app/scripts/entrypoint.sh"]
+
 volumes:
   pgdata:
     driver: local
