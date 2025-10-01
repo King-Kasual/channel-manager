@@ -1,6 +1,6 @@
 import discord
 
-def group_delete(group):
+def group_delete(group, db):
     # Dispose of a channel flagged for automated channel creation
     @group.command(name="delete", description="Deletes an auto creating channel")
     async def delete(inter: discord.Interaction, channel: discord.abc.GuildChannel) -> None:

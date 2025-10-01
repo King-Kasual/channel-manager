@@ -29,9 +29,9 @@ def main():
 
     # ----------------- CREATE COMMAND GROUPS --------------------
     group = discord.app_commands.Group(name="channel_manager", description="Base Channel Manager Commmand")
-    group = create_channel.group_create(group)
-    group = delete_channel.group_delete(group)
-    group = list_channels.group_list(group)
+    group = create_channel.group_create(group, db)
+    group = delete_channel.group_delete(group, db)
+    group = list_channels.group_list(group, db)
 
     bot.tree.add_command(group)
 
