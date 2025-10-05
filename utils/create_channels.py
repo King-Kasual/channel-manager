@@ -4,20 +4,18 @@ import discord.channel
 from utils.sql import sql
 
 # Creates new statuc channel to spawn dynamic channels off of
-async def Create_Static_Channels(channel, db):
-
-	new_channel = await channel.guild.create_voice_channel(name = channel,)
-
+async def Create_Static_Channels(name, channel, db):
+	new_channel = await channel.guild.create_voice_channel(name=name,category=channel)
 	sql.Add_channel_Static(db, new_channel.id)
 
 	
 
 # Creates new dynamic channel and move the member to the newly created channel
-async def Create_Dynamic_Channels(member, channel):
-  
-	new_channel = await member.voice.channel.clone(name = channel)
+async def Create_Dynamic_Channels(member, channel, db):
+	
+	new_channel = await member.voice.channel.clone(name=member.name,category=channel)
  
-	sql.Add_channel_Static(new_channel.id)
+	sql.Add_channel_Static(db, new_channel.id)
  
 	await new_channel.set_permissions(
 			member,
