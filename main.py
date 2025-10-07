@@ -28,10 +28,12 @@ def main():
     from commands import list_channels
 
     # ----------------- CREATE COMMAND GROUPS --------------------
-    group = discord.app_commands.Group(name="channel_manager", description="Base Channel Manager Commmand")
+    group = discord.app_commands.Group(
+        name="channel_manager", description="Base Channel Manager Commmand"
+    )
     group = create_channel.group_create(group, db)
     group = delete_channel.group_delete(group, db)
-    group = list_channels.group_list(group, db)
+    group = list_channels.group_list(group, db, bot)
 
     bot.tree.add_command(group)
 
@@ -43,6 +45,7 @@ def main():
 
     # Run the bot
     bot.run(token)
+
 
 if __name__ == "__main__":
     main()
