@@ -6,5 +6,6 @@ channel_dynamic = Table(
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("discord_channel_id", String(64), nullable=False, unique=True),
+    Column("discord_guild_id", String(64), nullable=False),
     Column("created_at", DateTime(timezone=True)),
 )
