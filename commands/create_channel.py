@@ -9,9 +9,13 @@ def group_create(group, db):
     async def create(
         inter: discord.Interaction, name: str, channel: discord.abc.GuildChannel
     ) -> None:
+    async def create(
+        inter: discord.Interaction, name: str, channel: discord.abc.GuildChannel
+    ) -> None:
         await Create_Static_Channels(name, channel, db)
-
-        # await commands.create_channel(name,channel)
-        # await inter.response.send_message(f"{name}")
+        await inter.response.send_message(
+            f"The static channel {name} should have been created."
+        )
 
     return group
+

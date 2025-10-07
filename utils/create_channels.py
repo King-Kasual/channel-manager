@@ -1,4 +1,4 @@
-﻿import discord
+import discord
 from discord import guild
 import discord.channel
 from utils.sql import sql

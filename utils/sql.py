@@ -1,12 +1,8 @@
-from sqlalchemy import text
+from sqlalchemy import text, select
 from sqlalchemy.orm import Session
 
 
 class sql:
-    """def Setup_DB(db):
-    if not sql.dialect.has_table(db, table_name):
-        None
-    """
 
     # Adds a static channel that users join to create a dynamic channel
     def Add_channel_Static(db, channel_id):
@@ -51,4 +47,11 @@ class sql:
         session.commit()
 
     def List_Channel_Static(db):
-        print("")
+        session = Session(db)
+        channel_ID_List = (
+            session.execute(text("select * from channel_static;"))
+            .columns("discord_channel_ID")
+            .all()
+        )
+        print(f"Channel_list: {channel_ID_List}")
+        return channel_ID_List
