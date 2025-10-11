@@ -49,8 +49,18 @@ class sql:
     def List_Channel_Static(db):
         session = Session(db)
         channel_ID_List = (
-            session.execute(text("select * from channel_static;"))
-            .columns("discord_channel_ID")
+            session.execute(text("select discord_channel_ID from channel_static;"))
+            .scalars()
+            .all()
+        )
+        print(f"Channel_list: {channel_ID_List}")
+        return channel_ID_List
+
+    def List_Channel_Dynamic(db):
+        session = Session(db)
+        channel_ID_List = (
+            session.execute(text("select discord_channel_ID from channel_dynamic;"))
+            .scalars()
             .all()
         )
         print(f"Channel_list: {channel_ID_List}")
