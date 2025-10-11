@@ -8,16 +8,16 @@ def group_list(group, db, bot):
     async def list(inter: discord.Interaction) -> None:
 
         channel_ID_list = sql.List_Channel_Static(db)
-        inter.guild_id
 
         # This gets the ID list of channel that belond to the this guild
         channel_name_list = []
         for channel_ID in channel_ID_list:
             print(f"Channel_ID: {channel_ID}")
-            channel = bot.get_channel(channel_ID)
+            channel = await bot.fetch_channel(channel_ID)
+            print(f"Channel: {channel}")
 
-            if channel.guild.id() == inter.guild_id():
-                channel_name_list += channel.name()
+            if channel.guild.id == inter.guild_id:
+                channel_name_list.append(channel.name)
 
         await inter.response.send_message(channel_name_list)
 

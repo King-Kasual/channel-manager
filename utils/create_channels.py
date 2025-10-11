@@ -6,22 +6,52 @@ from utils.sql import sql
 
 # Creates new statuc channel to spawn dynamic channels off of
 async def Create_Static_Channels(name, channel, db):
-    new_channel = await channel.guild.create_voice_channel(name=name, category=channel)
-    sql.Add_channel_Static(db, new_channel.id)
+    try:
+        new_channel = await channel.guild.create_voice_channel(
+            name=name, category=channel
+        )
+    except Exception as e:
+        response = f"Failed to create channel {name} due to {e}"
+    else:
+        sql.Add_channel_Static(db, new_channel.id)
+        response = f"Channel {name} created successfully"
+    print(response)
+    return response
 
 
 # Creates new dynamic channel and move the member to the newly created channel
-async def Create_Dynamic_Channels(member, channel, db):
+async def Create_Dynamic_Channels(member, channel, db, name):
 
-    new_channel = await member.voice.channel.clone(name=member.name, category=channel)
-
-    sql.Add_channel_Static(db, new_channel.id)
-
-    await new_channel.set_permissions(
-        member,
-        manage_channels=True,
-        move_members=True,
-        priority_speaker=True,
-        mute_members=True,
-    )
-    await member.edit(voice_channel=new_channel)
+    try:
+        new_channel = await member.voice.channel.clone(
+            name=name, category=channel.category
+        )
+        await new_channel.set_permissions(
+            member,
+            manage_channels=True,
+            move_members=True,
+            priority_speaker=True,
+            mute_members=True,
+            deafen_members=True,
+            view_channel=True,
+            connect=True,
+            speak=True,
+            stream=True,
+            use_voice_activation=True,
+            manage_permissions=True,
+            manage_messages=True,
+            read_message_history=True,
+            send_messages=True,
+            send_tts_messages=True,
+            embed_links=True,
+            attach_files=True,
+            read_messages=True,
+        )
+        await member.edit(voice_channel=new_channel)
+    except Exception as e:
+        response = f"Failed to create channel {member.name} due to {e}"
+    else:
+        sql.Add_channel_Dynamic(db, new_channel.id)
+        response = f"Channel {member.name} created successfully"
+    print(response)
+    return response

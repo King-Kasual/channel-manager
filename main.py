@@ -44,7 +44,7 @@ def main():
     from events import check_joined_channel
 
     # ---------------------- RUN EVENTS -------------------------
-    check_joined_channel.check_joined_channel(bot)
+    check_joined_channel.check_joined_channel(bot, db)
 
     # Run the bot
     bot.run(token)

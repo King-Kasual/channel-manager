@@ -1,4 +1,6 @@
 import discord
+from utils.delete_channels import Delete_Static_Channels
+from utils.sql import sql
 
 
 def group_delete(group, db):
@@ -7,6 +9,15 @@ def group_delete(group, db):
     async def delete(
         inter: discord.Interaction, channel: discord.abc.GuildChannel
     ) -> None:
-        await inter.response.send_message("")
+        if inter.guild_id != channel.guild.id:
+            print("Channel not in this guild")
+            await inter.response.send_message("Channel not in this guild")
+            return
+        current_channels = sql.List_Channel_Static(db)
+        if channel.id.__str__() not in current_channels or current_channels is None:
+            await inter.response.send_message("Channel not managed by bot")
+            return
+        response = await Delete_Static_Channels(channel, db)
+        await inter.response.send_message(response)
 
     return group
