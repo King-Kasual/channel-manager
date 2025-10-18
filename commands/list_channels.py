@@ -2,19 +2,21 @@ import discord
 from utils.sql import sql
 
 
-def group_list(group, db, bot):
+def group_list(group, db, bot, debug=False):
     # List channels managed by bot
     @group.command(name="list", description="Lists all auto creating channels")
     async def list(inter: discord.Interaction) -> None:
 
-        channel_ID_list = sql.List_Channel_Static(db)
+        channel_ID_list = sql.List_Channel_Static(db, debug=debug)
 
         # This gets the ID list of channel that belond to the this guild
         channel_name_list = []
         for channel_ID in channel_ID_list:
-            print(f"Channel_ID: {channel_ID}")
+            if debug:
+                print(f"Channel_ID: {channel_ID}")
             channel = await bot.fetch_channel(channel_ID)
-            print(f"Channel: {channel}")
+            if debug:
+                print(f"Channel: {channel}")
 
             if channel.guild.id == inter.guild_id:
                 channel_name_list.append(channel.name)

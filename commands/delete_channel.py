@@ -3,21 +3,20 @@ from utils.delete_channels import Delete_Static_Channels
 from utils.sql import sql
 
 
-def group_delete(group, db):
+def group_delete(group, db, debug=False):
     # Dispose of a channel flagged for automated channel creation
     @group.command(name="delete", description="Deletes an auto creating channel")
     async def delete(
         inter: discord.Interaction, channel: discord.abc.GuildChannel
     ) -> None:
         if inter.guild_id != channel.guild.id:
-            print("Channel not in this guild")
             await inter.response.send_message("Channel not in this guild")
             return
-        current_channels = sql.List_Channel_Static(db)
+        current_channels = sql.List_Channel_Static(db, debug=debug)
         if channel.id.__str__() not in current_channels or current_channels is None:
             await inter.response.send_message("Channel not managed by bot")
             return
-        response = await Delete_Static_Channels(channel, db)
+        response = await Delete_Static_Channels(channel, db, debug=debug)
         await inter.response.send_message(response)
 
     return group

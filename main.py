@@ -3,6 +3,7 @@ from discord.ext import commands
 from os import getenv
 from dotenv import load_dotenv
 import config
+import asyncio
 
 
 def main():
@@ -15,6 +16,8 @@ def main():
     db_password = getenv("DB_PASSWORD", "")
     db_name = getenv("DB_NAME", "channel-manager")
     db_port = int(getenv("DB_PORT", "5432"))
+    debug = getenv("DEBUG", "False").lower() == "true"
+    print(f"Debug Mode: {debug}")
 
     # --------------- SETUP DATABASE CONNECTION ------------------
     db = config.DB_Connect(db_host, db_user, db_password, db_name, db_port)
@@ -29,24 +32,25 @@ def main():
 
     # ----------------- CREATE COMMAND GROUPS --------------------
     group = discord.app_commands.Group(
-        name="channel_manager", description="Base Channel Manager Commmand"
+        name="channel_manager",
+        description="Base Channel Manager Commmand",
+        guild_only=True,
     )
-    group = discord.app_commands.Group(
-        name="channel_manager", description="Base Channel Manager Commmand"
-    )
-    group = create_channel.group_create(group, db)
-    group = delete_channel.group_delete(group, db)
-    group = list_channels.group_list(group, db, bot)
+    group = create_channel.group_create(group, db, debug=debug)
+    group = delete_channel.group_delete(group, db, debug=debug)
+    group = list_channels.group_list(group, db, bot, debug=debug)
 
     bot.tree.add_command(group)
 
     # ---------------- IMPORT EVENTS FUNCTIONS ------------------
     from events import check_joined_channel
+    from events import bot_on_ready
 
     # ---------------------- RUN EVENTS -------------------------
-    check_joined_channel.check_joined_channel(bot, db)
+    check_joined_channel.check_joined_channel(bot, db, debug=debug)
+    bot_on_ready.main_commands_sync(bot)
 
-    # Run the bot
+    # ---------------------- START BOT --------------------------
     bot.run(token)
 
 

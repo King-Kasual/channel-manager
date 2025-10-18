@@ -4,8 +4,8 @@ import discord.channel
 from utils.sql import sql
 
 
-# Creates new statuc channel to spawn dynamic channels off of
-async def Create_Static_Channels(name, channel, db):
+# Creates new static channel to spawn dynamic channels off of
+async def Create_Static_Channels(name, channel, db, debug=False):
     try:
         new_channel = await channel.guild.create_voice_channel(
             name=name, category=channel
@@ -15,12 +15,13 @@ async def Create_Static_Channels(name, channel, db):
     else:
         sql.Add_channel_Static(db, new_channel.id)
         response = f"Channel {name} created successfully"
-    print(response)
+    if debug:
+        print(response)
     return response
 
 
 # Creates new dynamic channel and move the member to the newly created channel
-async def Create_Dynamic_Channels(member, channel, db, name):
+async def Create_Dynamic_Channels(member, channel, db, name, debug=False):
 
     try:
         new_channel = await member.voice.channel.clone(
@@ -53,5 +54,6 @@ async def Create_Dynamic_Channels(member, channel, db, name):
     else:
         sql.Add_channel_Dynamic(db, new_channel.id)
         response = f"Channel {member.name} created successfully"
-    print(response)
+    if debug:
+        print(response)
     return response
