@@ -4,7 +4,7 @@ import discord.channel
 from utils.sql import sql
 
 
-# Creates new static channel to spawn dynamic channels off of
+# Deletes static channels both from Discord and the database
 async def Delete_Static_Channels(channel, db, debug=False):
     try:
         await channel.delete()
@@ -19,6 +19,7 @@ async def Delete_Static_Channels(channel, db, debug=False):
     return response
 
 
+# Deletes dynamic channels both from Discord and the database
 async def Delete_Dynamic_Channels(channel, db, debug=False):
     try:
         await channel.delete()

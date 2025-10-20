@@ -45,10 +45,12 @@ def main():
     # ---------------- IMPORT EVENTS FUNCTIONS ------------------
     from events import check_joined_channel
     from events import bot_on_ready
+    from events import channel_changes
 
     # ---------------------- RUN EVENTS -------------------------
     check_joined_channel.check_joined_channel(bot, db, debug=debug)
     bot_on_ready.main_commands_sync(bot)
+    channel_changes.channel_changes(bot, db, debug=debug)
 
     # ---------------------- START BOT --------------------------
     bot.run(token)
