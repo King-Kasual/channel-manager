@@ -25,7 +25,7 @@ def check_joined_channel(bot, db, debug=False):
                 if debug:
                     print(response)
 
-            # Check if the channel left is a dynamic channel and if it is empty
+        # Check if the channel left is a dynamic channel and if it is empty
         if before.channel is not None and (before.channel != after.channel):
             if debug:
                 print(

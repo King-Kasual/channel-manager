@@ -28,6 +28,7 @@ class sql:
         )
         session.commit()
 
+    # Deletes a static channel entry
     def Delete_channel_Static(db, channel_id, debug=False):
         session = Session(db)
         if debug:
@@ -39,6 +40,7 @@ class sql:
         )
         session.commit()
 
+    # Delete a Dynamic channel entry
     def Delete_channel_Dynamic(db, channel_id, debug=False):
         session = Session(db)
         if debug:
@@ -50,6 +52,7 @@ class sql:
         )
         session.commit()
 
+    # List all static channels
     def List_Channel_Static(db, debug=False):
         session = Session(db)
         channel_ID_List = (
@@ -61,6 +64,7 @@ class sql:
             print(f"Channel_list: {channel_ID_List}")
         return channel_ID_List
 
+    # List all Dynamic channels
     def List_Channel_Dynamic(db, debug=False):
         session = Session(db)
         channel_ID_List = (
@@ -71,3 +75,27 @@ class sql:
         if debug:
             print(f"Channel_list: {channel_ID_List}")
         return channel_ID_List
+
+    # Check if a channel is registered as Static
+    def is_Channel_Static(db, channel_id, debug=False):
+        session = Session(db)
+        result = session.execute(
+            text(
+                f"select exists (select 1 from channel_static where discord_channel_ID = '{channel_id}');"
+            )
+        ).scalar()
+        if debug:
+            print(f"Is Channel Static: {result}")
+        return result
+
+    # Check if a channel is registered as Dynamic
+    def is_channel_Dynamic(db, channel_id, debug=False):
+        session = Session(db)
+        result = session.execute(
+            text(
+                f"select exists (select 1 from channel_dynamic where discord_channel_ID = '{channel_id}');"
+            )
+        ).scalar()
+        if debug:
+            print(f"Is Channel Dynamic: {result}")
+        return result
