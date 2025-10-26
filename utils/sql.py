@@ -62,18 +62,45 @@ class sql:
         session.close()
         return channel_name_list
 
+    # Lists all channel names from a given guild in a specified table
+    def list_name_from_guild(db, table, guild_id, debug=False):
+        try:
+            session = Session(db)
+            channel_name_list = (
+                session.execute(
+                    text(f"select name from {table} where guild_ID = '{guild_id}';")
+                )
+                .scalars()
+                .all()
+            )
+        except Exception as e:
+            print(f"Error fetching channel names for guild {guild_id}: {e}")
+            session.rollback()
+            raise e
+        else:
+            return channel_name_list
+        finally:
+            session.close()
+
     # Check if a channel exists in a given table
     def channel_exists(db, table, channel_id, debug=False):
-        session = Session(db)
-        result = session.execute(
-            text(
-                f"select exists (select 1 from {table} where channel_ID = '{channel_id}');"
-            )
-        ).scalar()
-        if debug:
-            print(f"Channel exists in {table}: {result}")
-        session.close()
-        return result
+        try:
+            session = Session(db)
+            result = session.execute(
+                text(
+                    f"select exists (select 1 from {table} where channel_ID = '{channel_id}');"
+                )
+            ).scalar()
+            if debug:
+                print(f"Channel exists in {table}: {result}")
+        except Exception as e:
+            print(f"Error checking if channel exists: {e}")
+            session.rollback()
+            raise e
+        else:
+            return result
+        finally:
+            session.close()
 
     # Update channel name in a given table
     def update_channel_name(db, table, channel_id, new_name, debug=False):
@@ -90,6 +117,24 @@ class sql:
             session.commit()
         except Exception as e:
             print(f"Error updating channel name: {e}")
+            session.rollback()
+            raise e
+        finally:
+            session.close()
+
+    def update_channel_guild_id(db, table, channel_id, guild_id, debug=False):
+        if debug:
+            print("Updating guild id for ID:", channel_id, "to", guild_id)
+        try:
+            session = Session(db)
+            session.execute(
+                text(
+                    f"update {table} set guild_id = '{guild_id}' where channel_ID = '{channel_id}';"
+                )
+            )
+            session.commit()
+        except Exception as e:
+            print(f"Error updating guild id: {e}")
             session.rollback()
             raise e
         finally:
