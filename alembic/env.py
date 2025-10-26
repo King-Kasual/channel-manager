@@ -62,7 +62,9 @@ try:
 except Exception:
     try:
         # fallback: package-style import
-        from channel_manager.models import metadata as target_metadata  # type: ignore
+        from database.models import base  # type: ignore
+
+        target_metadata = [base.metadata]
     except Exception:
         # no metadata available; autogenerate won't work until you provide it
         target_metadata = None
