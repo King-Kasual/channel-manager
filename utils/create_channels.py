@@ -13,7 +13,9 @@ async def Create_Static_Channels(name, channel, db, debug=False):
     except Exception as e:
         response = f"Failed to create channel {name} due to {e}"
     else:
-        sql.Add_channel_Static(db, new_channel.id)
+        sql.add_channel(
+            db, "channel_static", new_channel.id, name, new_channel.guild.id
+        )
         response = f"Channel {name} created successfully"
     if debug:
         print(response)
@@ -52,7 +54,9 @@ async def Create_Dynamic_Channels(member, channel, db, name, debug=False):
     except Exception as e:
         response = f"Failed to create channel {member.name} due to {e}"
     else:
-        sql.Add_channel_Dynamic(db, new_channel.id)
+        sql.add_channel(
+            db, "channel_dynamic", new_channel.id, name, new_channel.guild.id
+        )
         response = f"Channel {member.name} created successfully"
     if debug:
         print(response)
