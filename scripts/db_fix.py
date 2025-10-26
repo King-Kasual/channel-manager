@@ -1,4 +1,4 @@
-from sqlalchemy import text
+from sqlalchemy import false, text, bindparam
 from sqlalchemy.orm import Session
 from utils.sql import sql
 
@@ -10,7 +10,7 @@ def fix_db_channel(db, bot):
 
 
 def check_and_fix_channel(db, bot, table):
-    results = get_incorerct_channels(db, table)
+    results = get_incorrect_channels(db, table)
     if results is None:
         return
     for row in results:
@@ -28,7 +28,8 @@ def check_and_fix_channel(db, bot, table):
             sql.update_channel_name(db, table, channel_id, channel.name, debug=True)
 
 
-def get_incorerct_channels(db, table):
+def get_incorrect_channels(db, table):
+    session = None
     try:
         session = Session(db)
         results = session.execute(
@@ -36,7 +37,6 @@ def get_incorerct_channels(db, table):
                 f"select channel_id, name, guild_id from {table} where name = 'None' or guild_id = -1;"
             )
         )
-        session.commit()
     except Exception as e:
         print(f"Error fetching incorrect channels: {e}")
         session.rollback()

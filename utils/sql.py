@@ -8,13 +8,15 @@ class sql:
     def add_channel(db, table, channel_id, name, guild_id, debug=False):
         if debug:
             print(channel_id)
+        session = None
         try:
             session = Session(db)
             formated_name = name.replace("'", "''")
             session.execute(
                 text(
-                    f"insert into {table} (channel_ID, name, guild_ID) values ('{channel_id}', '{formated_name}', '{guild_id}');"
-                )
+                    f"insert into {table} (channel_ID, name, guild_ID) values (:channel_id, :name, :guild_id);"
+                ),
+                {"channel_id": channel_id, "name": formated_name, "guild_id": guild_id},
             )
             session.commit()
         except Exception as e:
@@ -28,6 +30,7 @@ class sql:
     def delete_channel(db, table, channel_id, debug=False):
         if debug:
             print(channel_id)
+        session = None
         try:
             session = Session(db)
             session.execute(
@@ -64,6 +67,7 @@ class sql:
 
     # Lists all channel names from a given guild in a specified table
     def list_name_from_guild(db, table, guild_id, debug=False):
+        session = None
         try:
             session = Session(db)
             channel_name_list = (
@@ -77,13 +81,13 @@ class sql:
             print(f"Error fetching channel names for guild {guild_id}: {e}")
             session.rollback()
             raise e
-        else:
-            return channel_name_list
         finally:
             session.close()
-
+        return channel_name_list
+    
     # Check if a channel exists in a given table
     def channel_exists(db, table, channel_id, debug=False):
+        session = None
         try:
             session = Session(db)
             result = session.execute(
@@ -97,22 +101,23 @@ class sql:
             print(f"Error checking if channel exists: {e}")
             session.rollback()
             raise e
-        else:
-            return result
         finally:
             session.close()
+        return result
 
     # Update channel name in a given table
     def update_channel_name(db, table, channel_id, new_name, debug=False):
         if debug:
             print("Updating channel name for ID:", channel_id, "to", new_name)
+        session = None
         try:
             session = Session(db)
             formated_name = new_name.replace("'", "''")
             session.execute(
                 text(
-                    f"update {table} set name = '{formated_name}' where channel_ID = '{channel_id}';"
-                )
+                    f"update {table} set name = :name where channel_ID = :channel_id;"
+                ),
+                {"name": formated_name, "channel_id": channel_id},
             )
             session.commit()
         except Exception as e:
@@ -125,6 +130,7 @@ class sql:
     def update_channel_guild_id(db, table, channel_id, guild_id, debug=False):
         if debug:
             print("Updating guild id for ID:", channel_id, "to", guild_id)
+        session = None
         try:
             session = Session(db)
             session.execute(

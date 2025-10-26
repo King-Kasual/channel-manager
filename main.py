@@ -33,7 +33,7 @@ def main():
     # ----------------- CREATE COMMAND GROUPS --------------------
     group = discord.app_commands.Group(
         name="channel_manager",
-        description="Base Channel Manager Commmand",
+        description="Base Channel Manager Command",
         guild_only=True,
     )
     group = create_channel.group_create(bot, group, db, debug=debug)
