@@ -33,10 +33,10 @@ def main():
     # ----------------- CREATE COMMAND GROUPS --------------------
     group = discord.app_commands.Group(
         name="channel_manager",
-        description="Base Channel Manager Commmand",
+        description="Base Channel Manager Command",
         guild_only=True,
     )
-    group = create_channel.group_create(group, db, debug=debug)
+    group = create_channel.group_create(bot, group, db, debug=debug)
     group = delete_channel.group_delete(group, db, debug=debug)
     group = list_channels.group_list(group, db, bot, debug=debug)
 
@@ -49,7 +49,7 @@ def main():
 
     # ---------------------- RUN EVENTS -------------------------
     check_joined_channel.check_joined_channel(bot, db, debug=debug)
-    bot_on_ready.main_commands_sync(bot)
+    bot_on_ready.main_commands_sync(bot, db)
     channel_changes.channel_changes(bot, db, debug=debug)
 
     # ---------------------- START BOT --------------------------
