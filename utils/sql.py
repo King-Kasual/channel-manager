@@ -11,12 +11,11 @@ class sql:
         session = None
         try:
             session = Session(db)
-            formated_name = name.replace("'", "''")
             session.execute(
                 text(
                     f"insert into {table} (channel_ID, name, guild_ID) values (:channel_id, :name, :guild_id);"
                 ),
-                {"channel_id": channel_id, "name": formated_name, "guild_id": guild_id},
+                {"channel_id": channel_id, "name": name, "guild_id": guild_id},
             )
             session.commit()
         except Exception as e:
@@ -112,12 +111,11 @@ class sql:
         session = None
         try:
             session = Session(db)
-            formated_name = new_name.replace("'", "''")
             session.execute(
                 text(
                     f"update {table} set name = :name where channel_ID = :channel_id;"
                 ),
-                {"name": formated_name, "channel_id": channel_id},
+                {"name": new_name, "channel_id": channel_id},
             )
             session.commit()
         except Exception as e:
