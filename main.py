@@ -29,6 +29,8 @@ def main():
     from commands import create_channel
     from commands import delete_channel
     from commands import list_channels
+    from commands import add_channel
+    from commands import remove_channel 
 
     # ----------------- CREATE COMMAND GROUPS --------------------
     group = discord.app_commands.Group(
@@ -39,6 +41,8 @@ def main():
     group = create_channel.group_create(bot, group, db, debug=debug)
     group = delete_channel.group_delete(group, db, debug=debug)
     group = list_channels.group_list(group, db, bot, debug=debug)
+    group = add_channel.group_add_channel(group, db, bot, debug=debug)
+    group = remove_channel.group_remove_channel(group, db, bot, debug=debug)
 
     bot.tree.add_command(group)
 
