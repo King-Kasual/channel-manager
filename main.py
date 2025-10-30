@@ -30,7 +30,7 @@ def main():
     from commands import delete_channel
     from commands import list_channels
     from commands import add_channel
-    from commands import remove_channel 
+    from commands import remove_channel
 
     # ----------------- CREATE COMMAND GROUPS --------------------
     group = discord.app_commands.Group(

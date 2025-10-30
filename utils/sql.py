@@ -83,7 +83,7 @@ class sql:
         finally:
             session.close()
         return channel_name_list
-    
+
     # Check if a channel exists in a given table
     def channel_exists(db, table, channel_id, debug=False):
         session = None
