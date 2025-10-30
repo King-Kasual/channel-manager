@@ -1,0 +1,29 @@
+name: Close Issue on Staging Merge
+on:
+  pull_request:
+    types: [closed]
+    branches: [staging]
+
+jobs:
+  close-issue:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issueNumber = context.payload.pull_request.number;
+            const issueTitle = context.payload.pull_request.title;
+            const issueBody = context.payload.pull_request.body || '';
+            const regex = /(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+(?:#(\d+)|https:\/\/github\.com\/.+?\/.+?\/issues\/(\d+))/i;
+            const matches = issueBody.match(regex);
+            const issueToClose = matches ? (matches[1] || matches[2]) : null;
+            if (issueToClose) {
+              github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(issueToClose),
+                state: 'closed'
+              });
+            }   
