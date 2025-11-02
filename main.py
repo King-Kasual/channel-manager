@@ -29,26 +29,32 @@ def main():
     from commands import create_channel
     from commands import delete_channel
     from commands import list_channels
+    from commands import add_channel
+    from commands import remove_channel
 
     # ----------------- CREATE COMMAND GROUPS --------------------
     group = discord.app_commands.Group(
         name="channel_manager",
-        description="Base Channel Manager Commmand",
+        description="Base Channel Manager Command",
         guild_only=True,
     )
-    group = create_channel.group_create(group, db, debug=debug)
+    group = create_channel.group_create(bot, group, db, debug=debug)
     group = delete_channel.group_delete(group, db, debug=debug)
     group = list_channels.group_list(group, db, bot, debug=debug)
+    group = add_channel.group_add_channel(group, db, bot, debug=debug)
+    group = remove_channel.group_remove_channel(group, db, bot, debug=debug)
 
     bot.tree.add_command(group)
 
     # ---------------- IMPORT EVENTS FUNCTIONS ------------------
     from events import check_joined_channel
     from events import bot_on_ready
+    from events import channel_changes
 
     # ---------------------- RUN EVENTS -------------------------
     check_joined_channel.check_joined_channel(bot, db, debug=debug)
-    bot_on_ready.main_commands_sync(bot)
+    bot_on_ready.main_commands_sync(bot, db)
+    channel_changes.channel_changes(bot, db, debug=debug)
 
     # ---------------------- START BOT --------------------------
     bot.run(token)

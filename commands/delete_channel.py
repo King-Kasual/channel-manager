@@ -12,8 +12,7 @@ def group_delete(group, db, debug=False):
         if inter.guild_id != channel.guild.id:
             await inter.response.send_message("Channel not in this guild")
             return
-        current_channels = sql.List_Channel_Static(db, debug=debug)
-        if channel.id.__str__() not in current_channels or current_channels is None:
+        if sql.channel_exists(db, "channel_static", channel.id, debug) is False:
             await inter.response.send_message("Channel not managed by bot")
             return
         response = await Delete_Static_Channels(channel, db, debug=debug)
