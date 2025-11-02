@@ -1,10 +1,9 @@
-from sqlalchemy import false, text, bindparam
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 from utils.sql import sql
 
 
 def fix_db_channel(db, bot):
-
     check_and_fix_channel(db, bot, "channel_static")
     check_and_fix_channel(db, bot, "channel_dynamic")
 
@@ -34,13 +33,16 @@ def get_incorrect_channels(db, table):
         session = Session(db)
         results = session.execute(
             text(
-                f"select channel_id, name, guild_id from {table} where name = 'None' or guild_id = -1;"
+                f"select channel_id, name, guild_id from {table} "
+                "where name = 'None' or guild_id = -1;"
             )
         )
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"Error fetching incorrect channels: {e}")
-        session.rollback()
+        if session is not None:
+            session.rollback()
         raise e
     finally:
-        session.close()
+        if session is not None:
+            session.close()
     return results

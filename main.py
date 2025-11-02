@@ -1,16 +1,15 @@
+from os import getenv
+
 import discord
 from discord.ext import commands
-from os import getenv
 from dotenv import load_dotenv
 import config
-import asyncio
 
 
-def main():
-
+def main():  # pylint: disable=too-many-locals
     # --------------- LOAD ENVIRONMENT VARIABLES ------------------
     load_dotenv()
-    token = getenv("BOT_TOKEN_KEY")
+    token = getenv("BOT_TOKEN_KEY") or ""
     db_host = getenv("DB_HOST", "localhost")
     db_user = getenv("DB_USER", "chmgruser")
     db_password = getenv("DB_PASSWORD", "")
@@ -26,11 +25,12 @@ def main():
     bot = commands.Bot(command_prefix="!", intents=intents)
 
     # ---------------- IMPORT COMMANDS FUNCTIONS -----------------
+    # pylint: disable=import-outside-toplevel
+    from commands import add_channel
     from commands import create_channel
     from commands import delete_channel
     from commands import list_channels
-    from commands import add_channel
-    from commands import remove_channel 
+    from commands import remove_channel
 
     # ----------------- CREATE COMMAND GROUPS --------------------
     group = discord.app_commands.Group(
@@ -47,9 +47,10 @@ def main():
     bot.tree.add_command(group)
 
     # ---------------- IMPORT EVENTS FUNCTIONS ------------------
-    from events import check_joined_channel
+    # pylint: disable=import-outside-toplevel
     from events import bot_on_ready
     from events import channel_changes
+    from events import check_joined_channel
 
     # ---------------------- RUN EVENTS -------------------------
     check_joined_channel.check_joined_channel(bot, db, debug=debug)

@@ -9,4 +9,9 @@ class channel_dynamic(base):
     channel_id = Column(BigInteger, nullable=False, unique=True)
     name = Column(String(100), nullable=False)
     guild_id = Column(BigInteger, nullable=False)
-    created_at = Column(DateTime(timezone=True), default=func.now(), nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        # NOTE: func.now() is a SQL expression; suppress not-callable false positive
+        default=func.now(),  # pylint: disable=not-callable
+        nullable=False,
+    )

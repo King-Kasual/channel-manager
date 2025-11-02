@@ -19,6 +19,15 @@ Make targets
 - `make format`  
   Run code formatter: `python3 -m black .`
 
+- `make format-check`  
+  Verify formatting without modifying files: `python3 -m black --check .`
+
+- `make lint`  
+  Run static analysis with Pylint (skips Alembic migrations): `python3 -m pylint $(git ls-files '*.py' ':(exclude)alembic/**')`
+
+- `make check`  
+  Run both format and lint checks: executes `make format-check` and `make lint`
+
 - `make build`  
   Build the app image: `docker compose build app`
 

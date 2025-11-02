@@ -9,7 +9,8 @@ def check_joined_channel(bot, db, debug=False):
         if after.channel is not None and (before.channel != after.channel):
             if debug:
                 print(
-                    f"{member.display_name} has joined {after.channel.name} ID: {after.channel.id}"
+                    f"{member.display_name} has joined {after.channel.name} "
+                    f"ID: {after.channel.id}"
                 )
 
             # Check if the channel joined is a static channel
@@ -30,7 +31,8 @@ def check_joined_channel(bot, db, debug=False):
         if before.channel is not None and (before.channel != after.channel):
             if debug:
                 print(
-                    f"{member.display_name} has left {before.channel.name} ID: {before.channel.id}"
+                    f"{member.display_name} has left {before.channel.name} "
+                    f"ID: {before.channel.id}"
                 )
             if sql.channel_exists(db, "channel_dynamic", before.channel.id, debug):
                 if debug:

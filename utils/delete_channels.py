@@ -1,6 +1,4 @@
 import discord
-from discord import guild
-import discord.channel
 from utils.sql import sql
 
 
@@ -8,8 +6,10 @@ from utils.sql import sql
 async def Delete_Static_Channels(channel, db, debug=False):
     try:
         await channel.delete()
-    except Exception as e:
-        response = f"Failed to delete channel {channel.name} due to {e}"
+    except discord.Forbidden as e:
+        response = f"Failed to delete channel {channel.name} due to permissions: {e}"
+    except discord.HTTPException as e:
+        response = f"Failed to delete channel {channel.name} due to HTTP error: {e}"
     else:
         sql.delete_channel(db, "channel_static", channel.id)
         response = f"Channel {channel.name} deleted successfully"
@@ -23,8 +23,10 @@ async def Delete_Static_Channels(channel, db, debug=False):
 async def Delete_Dynamic_Channels(channel, db, debug=False):
     try:
         await channel.delete()
-    except Exception as e:
-        response = f"Failed to delete channel {channel.name} due to {e}"
+    except discord.Forbidden as e:
+        response = f"Failed to delete channel {channel.name} due to permissions: {e}"
+    except discord.HTTPException as e:
+        response = f"Failed to delete channel {channel.name} due to HTTP error: {e}"
     else:
         sql.delete_channel(db, "channel_dynamic", channel.id)
         response = f"Channel {channel.name} deleted successfully"
