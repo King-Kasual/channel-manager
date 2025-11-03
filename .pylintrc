@@ -19,7 +19,6 @@ disable =
     missing-function-docstring,
     too-few-public-methods,
     no-self-argument,
-    duplicate-code,
 
 [REPORTS]
 output-format = colorized

@@ -4,7 +4,9 @@ from utils.sql import sql
 
 
 # Creates new static channel to spawn dynamic channels off of
-async def Create_Static_Channels(bot, name, channel, db, debug=False):  # pylint: disable=too-many-arguments,too-many-positional-arguments
+async def Create_Static_Channels(
+    bot, name, channel, db, debug=False
+):  # pylint: disable=too-many-arguments,too-many-positional-arguments
     try:
         new_channel = await channel.guild.create_voice_channel(
             name=name,
@@ -30,7 +32,9 @@ async def Create_Static_Channels(bot, name, channel, db, debug=False):  # pylint
 
 
 # Creates new dynamic channel and move the member to the newly created channel
-async def Create_Dynamic_Channels(bot, member, channel, db, name, debug=False):  # pylint: disable=too-many-arguments,too-many-positional-arguments
+async def Create_Dynamic_Channels(
+    bot, member, channel, db, name, debug=False
+):  # pylint: disable=too-many-arguments,too-many-positional-arguments
 
     try:
         new_channel = await channel.guild.create_voice_channel(

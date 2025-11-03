@@ -5,7 +5,9 @@ from sqlalchemy.orm import Session
 class sql:
 
     # Adds a channel to a specified table
-    def add_channel(db, table, channel_id, name, guild_id, debug=False):  # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def add_channel(
+        db, table, channel_id, name, guild_id, debug=False
+    ):  # pylint: disable=too-many-arguments,too-many-positional-arguments
         if debug:
             print(channel_id)
         session = None
@@ -37,8 +39,9 @@ class sql:
         try:
             session = Session(db)
             session.execute(
-                text(f"delete from {table} where channel_ID = :channel_id;")
-            , {"channel_id": channel_id})
+                text(f"delete from {table} where channel_ID = :channel_id;"),
+                {"channel_id": channel_id},
+            )
             session.commit()
         except Exception as e:
             print(f"Error deleting channel: {e}")
@@ -75,10 +78,7 @@ class sql:
             session = Session(db)
             channel_name_list = (
                 session.execute(
-                    text(
-                        "select name from "
-                        f"{table} where guild_ID = :guild_id;"
-                    )
+                    text("select name from " f"{table} where guild_ID = :guild_id;")
                 )
                 .scalars()
                 .all()
@@ -103,8 +103,9 @@ class sql:
                         "select exists (select 1 from "
                         f"{table} where channel_ID = :channel_id);"
                     )
-                )
-            , {"channel_id": channel_id}).scalar()
+                ),
+                {"channel_id": channel_id},
+            ).scalar()
             if debug:
                 print(f"Channel exists in {table}: {result}")
         except Exception as e:
