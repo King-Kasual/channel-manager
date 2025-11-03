@@ -1,11 +1,10 @@
 import discord
-from discord import guild
-from discord import channel, PermissionOverwrite, Permissions
+from discord import PermissionOverwrite
 from utils.sql import sql
 
 
 # Creates new static channel to spawn dynamic channels off of
-async def Create_Static_Channels(bot, name, channel, db, debug=False):
+async def Create_Static_Channels(bot, name, channel, db, debug=False):  # pylint: disable=too-many-arguments,too-many-positional-arguments
     try:
         new_channel = await channel.guild.create_voice_channel(
             name=name,
@@ -17,7 +16,7 @@ async def Create_Static_Channels(bot, name, channel, db, debug=False):
             category=channel,
         )
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         response = f"Failed to create channel {name} due to {e}"
         print(response)
     else:
@@ -31,7 +30,7 @@ async def Create_Static_Channels(bot, name, channel, db, debug=False):
 
 
 # Creates new dynamic channel and move the member to the newly created channel
-async def Create_Dynamic_Channels(bot, member, channel, db, name, debug=False):
+async def Create_Dynamic_Channels(bot, member, channel, db, name, debug=False):  # pylint: disable=too-many-arguments,too-many-positional-arguments
 
     try:
         new_channel = await channel.guild.create_voice_channel(
@@ -68,7 +67,7 @@ async def Create_Dynamic_Channels(bot, member, channel, db, name, debug=False):
     except discord.Forbidden as e:
         response = f"The bot is missing the permission: {e}"
         print(response)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         response = f"Failed to create channel {name} due to {e}"
         print(response)
     else:

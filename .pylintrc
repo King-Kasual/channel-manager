@@ -1,0 +1,26 @@
+[MASTER]
+ignore = __pycache__,.venv,build,dist,alembic
+
+[FORMAT]
+max-line-length = 88
+
+[TYPECHECK]
+ignored-modules = discord
+
+[BASIC]
+function-rgx=(([a-z_][a-z0-9_]+)|([A-Z][A-Za-z0-9_]+))$
+method-rgx=(([a-z_][a-z0-9_]+)|([A-Z][A-Za-z0-9_]+))$
+class-rgx=(([A-Z_][a-zA-Z0-9]+)|([a-z_]+))$
+
+[MESSAGES CONTROL]
+disable =
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    too-few-public-methods,
+    no-self-argument,
+    duplicate-code,
+
+[REPORTS]
+output-format = colorized
+score = no

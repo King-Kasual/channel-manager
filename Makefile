@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: format stop install clean build run psql-run run-all \
+.PHONY: format format-check lint check stop install clean build run psql-run run-all \
         install-deps revision upgrade downgrade current history \
         run-migrations docker-migrate
 
@@ -9,6 +9,16 @@ PIP := pip3
 
 format:
 	python3 -m black .
+
+format-check:
+	python3 -m black --check .
+
+lint:
+	python3 -m pylint $(shell git ls-files '*.py' ':(exclude)alembic/**')
+
+check: format-check lint
+
+format-lint: format lint
 
 stop:
 	docker compose down
