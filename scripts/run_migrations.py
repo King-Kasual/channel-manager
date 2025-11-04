@@ -1,6 +1,7 @@
-from alembic.config import Config
-from alembic import command
 import os
+
+from alembic import command
+from alembic.config import Config
 
 
 def run_migrations():
@@ -11,7 +12,10 @@ def run_migrations():
 
     cfg = Config(alembic_ini)
     # If you prefer to set the sqlalchemy.url here, you can:
-    # cfg.set_main_option('sqlalchemy.url', 'postgresql+psycopg2://user:pass@host:port/db')
+    # cfg.set_main_option(
+    #     'sqlalchemy.url',
+    #     'postgresql+psycopg2://user:pass@host:port/db',
+    # )
     command.upgrade(cfg, "head")
 
 

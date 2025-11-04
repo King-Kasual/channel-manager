@@ -1,4 +1,3 @@
-from py_compile import main
 from scripts import db_fix, cleanup_channels
 
 
