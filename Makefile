@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: format format-check lint check stop install clean build run psql-run run-all \
+.PHONY: format format-check lint check format-lint stop install clean build run psql-run run-all \
         install-deps revision upgrade downgrade current history \
         run-migrations docker-migrate
 

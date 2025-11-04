@@ -78,7 +78,8 @@ class sql:
             session = Session(db)
             channel_name_list = (
                 session.execute(
-                    text("select name from " f"{table} where guild_ID = :guild_id;")
+                    text("select name from " f"{table} where guild_ID = :guild_id;"),
+                    {"guild_id": guild_id},
                 )
                 .scalars()
                 .all()

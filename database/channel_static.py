@@ -12,6 +12,6 @@ class channel_static(base):
     guild_id = Column(BigInteger, nullable=False)
     created_at = Column(
         DateTime(timezone=True),
-        server_default=func.now(),  # pylint: disable=not-callable
+        default=func.now(),  # pylint: disable=not-callable
         nullable=False,
     )
