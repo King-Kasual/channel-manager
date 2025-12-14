@@ -1,3 +1,4 @@
+# pylint: disable=duplicate-code
 from sqlalchemy import BigInteger, Column, DateTime, String, Integer, func
 from database import base
 
@@ -9,4 +10,8 @@ class channel_dynamic(base):
     channel_id = Column(BigInteger, nullable=False, unique=True)
     name = Column(String(100), nullable=False)
     guild_id = Column(BigInteger, nullable=False)
-    created_at = Column(DateTime(timezone=True), default=func.now(), nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        default=func.now(),  # pylint: disable=not-callable
+        nullable=False,
+    )

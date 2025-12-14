@@ -1,12 +1,26 @@
+from os import getenv
+
 import discord
 from discord.ext import commands
-from os import getenv
 from dotenv import load_dotenv
+
 import config
-import asyncio
+from commands import (
+    add_channel,
+    create_channel,
+    delete_channel,
+    list_channels,
+    remove_channel,
+)
+from events import (
+    bot_on_ready,
+    channel_changes,
+    check_joined_channel,
+)
 
 
 def main():
+    # pylint: disable=too-many-locals
 
     # --------------- LOAD ENVIRONMENT VARIABLES ------------------
     load_dotenv()
@@ -25,13 +39,6 @@ def main():
     intents = discord.Intents.all()
     bot = commands.Bot(command_prefix="!", intents=intents)
 
-    # ---------------- IMPORT COMMANDS FUNCTIONS -----------------
-    from commands import create_channel
-    from commands import delete_channel
-    from commands import list_channels
-    from commands import add_channel
-    from commands import remove_channel
-
     # ----------------- CREATE COMMAND GROUPS --------------------
     group = discord.app_commands.Group(
         name="channel_manager",
@@ -45,11 +52,6 @@ def main():
     group = remove_channel.group_remove_channel(group, db, bot, debug=debug)
 
     bot.tree.add_command(group)
-
-    # ---------------- IMPORT EVENTS FUNCTIONS ------------------
-    from events import check_joined_channel
-    from events import bot_on_ready
-    from events import channel_changes
 
     # ---------------------- RUN EVENTS -------------------------
     check_joined_channel.check_joined_channel(bot, db, debug=debug)

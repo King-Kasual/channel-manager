@@ -2,13 +2,13 @@ import discord
 from utils.sql import sql
 
 
-def group_add_channel(group, db, bot, debug=False):
+def group_add_channel(group, db, _bot, debug=False):
     # Add a new channel to be managed by bot
     @group.command(name="add", description="Adds a new auto creating channel")
     async def add(
         inter: discord.Interaction, channel: discord.abc.GuildChannel
     ) -> None:
-        result = sql.add_channel(
+        sql.add_channel(
             db,
             "channel_static",
             channel.id,

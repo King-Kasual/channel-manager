@@ -2,7 +2,7 @@ import discord
 from utils.sql import sql
 
 
-def group_remove_channel(group, db, bot, debug=False):
+def group_remove_channel(group, db, _bot, debug=False):
     # Remove a channel from being managed by bot
     @group.command(name="remove", description="Removes an auto creating channel")
     async def remove(

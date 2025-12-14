@@ -1,5 +1,5 @@
 from utils.sql import sql
-from utils.delete_channels import Delete_Static_Channels, Delete_Dynamic_Channels
+from utils.delete_channels import Delete_Dynamic_Channels
 
 
 async def cleanup_static_channels(db, bot, debug=False):

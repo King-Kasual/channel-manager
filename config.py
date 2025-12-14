@@ -1,4 +1,3 @@
-import os
 from typing import Optional
 
 from sqlalchemy import create_engine
@@ -6,7 +5,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker, Session
 
 
-def _build_url_from_parts(
+def _build_url_from_parts(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     db_user: str,
     db_password: str,
     db_host: str,
@@ -25,7 +24,7 @@ def _build_url_from_parts(
     return url
 
 
-def DB_Connect(
+def DB_Connect(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     db_host: str,
     db_user: str,
     db_password: str,
@@ -33,10 +32,11 @@ def DB_Connect(
     db_port: int,
     db_sslmode: Optional[str] = None,
 ) -> Engine:
-    """Create and return a SQLAlchemy Engine using the provided connection parameters.
+    """Create and return a SQLAlchemy Engine using the provided parameters.
 
-    Signature kept similar to the previous `DB_Connect(... )` so `main.py` can continue calling it.
-    Returns a SQLAlchemy Engine which callers can use to create sessions or execute SQL.
+    Signature kept similar to the previous `DB_Connect(... )` so `main.py`
+    can continue calling it. Returns a SQLAlchemy Engine which callers can
+    use to create sessions or execute SQL.
     """
     url = _build_url_from_parts(
         db_user, db_password, db_host, db_port, db_name, sslmode=db_sslmode
@@ -49,15 +49,12 @@ def get_session(
     engine: Engine, autoflush: bool = True, autocommit: bool = False
 ) -> Session:
     """Return a SQLAlchemy Session bound to the provided engine."""
-    SessionLocal = sessionmaker(
+    session_factory = sessionmaker(
         bind=engine, autoflush=autoflush, autocommit=autocommit, future=True
     )
-    return SessionLocal()
+    return session_factory()
 
 
 def DB_Close(engine: Engine) -> None:
     """Dispose the SQLAlchemy engine (close all pooled connections)."""
-    try:
-        engine.dispose()
-    except Exception:
-        pass
+    engine.dispose()

@@ -1,4 +1,4 @@
-from sqlalchemy import false, text, bindparam
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 from utils.sql import sql
 
@@ -34,7 +34,10 @@ def get_incorrect_channels(db, table):
         session = Session(db)
         results = session.execute(
             text(
-                f"select channel_id, name, guild_id from {table} where name = 'None' or guild_id = -1;"
+                (
+                    "select channel_id, name, guild_id from "
+                    f"{table} where name = 'None' or guild_id = -1;"
+                )
             )
         )
     except Exception as e:

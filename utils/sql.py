@@ -1,11 +1,13 @@
-from sqlalchemy import text, select, insert, delete
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 
 class sql:
 
     # Adds a channel to a specified table
-    def add_channel(db, table, channel_id, name, guild_id, debug=False):
+    def add_channel(
+        db, table, channel_id, name, guild_id, debug=False
+    ):  # pylint: disable=too-many-arguments,too-many-positional-arguments
         if debug:
             print(channel_id)
         session = None
@@ -13,7 +15,11 @@ class sql:
             session = Session(db)
             session.execute(
                 text(
-                    f"insert into {table} (channel_ID, name, guild_ID) values (:channel_id, :name, :guild_id);"
+                    (
+                        "insert into "
+                        f"{table} (channel_ID, name, guild_ID) "
+                        "values (:channel_id, :name, :guild_id);"
+                    )
                 ),
                 {"channel_id": channel_id, "name": name, "guild_id": guild_id},
             )
@@ -33,7 +39,8 @@ class sql:
         try:
             session = Session(db)
             session.execute(
-                text(f"delete from {table} where channel_ID = '{channel_id}';")
+                text(f"delete from {table} where channel_ID = :channel_id;"),
+                {"channel_id": channel_id},
             )
             session.commit()
         except Exception as e:
@@ -46,13 +53,13 @@ class sql:
     # Lists all channel IDs from a given table
     def list_channel_id(db, table, debug=False):
         session = Session(db)
-        channel_ID_List = (
+        channel_id_list = (
             session.execute(text(f"select channel_ID from {table};")).scalars().all()
         )
         if debug:
-            print(f"Channel_ID_list: {channel_ID_List}")
+            print(f"Channel_ID_list: {channel_id_list}")
         session.close()
-        return channel_ID_List
+        return channel_id_list
 
     def list_channel_name(db, table, debug=False):
         session = Session(db)
@@ -71,13 +78,15 @@ class sql:
             session = Session(db)
             channel_name_list = (
                 session.execute(
-                    text(f"select name from {table} where guild_ID = '{guild_id}';")
+                    text("select name from " f"{table} where guild_ID = :guild_id;"),
+                    {"guild_id": guild_id},
                 )
                 .scalars()
                 .all()
             )
         except Exception as e:
-            print(f"Error fetching channel names for guild {guild_id}: {e}")
+            if debug:
+                print(f"Error fetching channel names for guild {guild_id}: {e}")
             session.rollback()
             raise e
         finally:
@@ -91,8 +100,12 @@ class sql:
             session = Session(db)
             result = session.execute(
                 text(
-                    f"select exists (select 1 from {table} where channel_ID = '{channel_id}');"
-                )
+                    (
+                        "select exists (select 1 from "
+                        f"{table} where channel_ID = :channel_id);"
+                    )
+                ),
+                {"channel_id": channel_id},
             ).scalar()
             if debug:
                 print(f"Channel exists in {table}: {result}")
@@ -133,8 +146,13 @@ class sql:
             session = Session(db)
             session.execute(
                 text(
-                    f"update {table} set guild_id = '{guild_id}' where channel_ID = '{channel_id}';"
-                )
+                    (
+                        "update "
+                        f"{table} set guild_id = :guild_id "
+                        "where channel_ID = :channel_id;"
+                    )
+                ),
+                {"guild_id": guild_id, "channel_id": channel_id},
             )
             session.commit()
         except Exception as e:
